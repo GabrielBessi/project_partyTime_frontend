@@ -36,6 +36,46 @@ export default {
       msgClass: null,
     };
   },
+  methods: {
+    async remove(id) {
+      const userId = this.$store.getters.userId;
+      const token = this.$store.getters.token;
+
+      const data = {
+        id: id,
+        userId: userId,
+      };
+
+      const jsonData = JSON.stringify(data);
+
+      await fetch("http://localhost:3000/api/party", {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: jsonData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            this.msg = data.error;
+            this.msgClass = "error";
+          } else {
+            this.msg = data.message;
+            this.msgClass = "success";
+          }
+
+          setTimeout(() => {
+            this.msg = null;
+            this.$parent.getParties();
+          }, 1000);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 

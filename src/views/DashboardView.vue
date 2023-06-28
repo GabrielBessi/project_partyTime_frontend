@@ -47,7 +47,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.parties = data;
+          this.parties = data.parties;
         })
         .catch((error) => {
           console.log(error);
