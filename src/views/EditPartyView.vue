@@ -22,6 +22,41 @@ export default {
       componentKey: 0,
     };
   },
+  created() {
+    this.getParty();
+  },
+  methods: {
+    async getParty() {
+      const id = this.$route.params.id;
+      const token = this.$store.getters.token;
+
+      await fetch(`http://localhost:3000/api/party/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          authorization: token,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          this.party = data;
+
+          this.party.partyDate = this.party.partyDate;
+
+          this.party.photos.forEach((photo, index) => {
+            this.party.photos[index] = photo.replace(
+              "public",
+              "http://localhost:3000"
+            );
+
+            this.componentKey += 1;
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 

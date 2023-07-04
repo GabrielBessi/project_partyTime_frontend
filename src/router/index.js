@@ -77,6 +77,18 @@ const routes = [
       requiresAuth: false,
     },
   },
+  {
+    path: "/party/:id",
+    name: "Party",
+    // route level code-splitting
+    // this generates a separate chunk (login.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "party" */ "../views/PartyView.vue"),
+    meta: {
+      requiresAuth: false,
+    },
+  },
 ];
 
 const router = createRouter({
