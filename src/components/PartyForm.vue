@@ -113,6 +113,8 @@ export default {
       formData.append("partyDate", this.party_date);
       formData.append("privacy", this.privacy);
 
+      console.log(formData);
+
       if (this.photos.length > 0) {
         for (const i of Object.keys(this.photos)) {
           formData.append("photos", this.photos[i]);
@@ -159,6 +161,43 @@ export default {
       if (!token) {
         this.$router.push("login");
       }
+      const formData = new FormData();
+      console.log(this);
+
+      formData.append("id", this.id);
+      formData.append("title", this.title);
+      formData.append("description", this.description);
+      formData.append("partyDate", this.party_date);
+      formData.append("privacy", this.privacy);
+      formData.append("user_id", this.user_id);
+
+      if (this.photos.length > 0) {
+        for (const i of Object.keys(this.photos)) {
+          formData.append("photos", this.photos[i]);
+        }
+      }
+
+      await fetch("http://localhost:3000/api/party", {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            this.msg = data.error;
+            this.msgClass = "error";
+          } else {
+            this.msg = data.message;
+            this.msgClass = "success";
+          }
+
+          setTimeout(() => {
+            this.msg = null;
+          }, 2000);
+        });
     },
   },
 };
